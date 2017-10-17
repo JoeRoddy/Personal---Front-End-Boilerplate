@@ -1,17 +1,35 @@
 import React from "react";
 import { render } from "react-dom";
 import DevTools from "mobx-react-devtools";
-import registerServiceWorker from "./helpers/registerServiceWorker";
-import './assets/styles/App.css';
 
-import TodoList from "./components/TodoList";
+import registerServiceWorker from "./helpers/registerServiceWorker";
+import "./assets/styles/App.css";
+import App from "./components/App";
 import stores from "./models/index";
+import firebase from "firebase";
+import { Provider } from "mobx-react";
+import createBrowserHistory from 'history/createBrowserHistory';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  withRouter
+} from 'react-router-dom';
+
+var config = {
+ //firebase config here
+};
+firebase.initializeApp(config);
+
+const browserHistory = createBrowserHistory();
+const AppWrapper = withRouter(App);
 
 render(
-  <div>
-    <DevTools />
-    <TodoList {...stores} />
-  </div>,
+  <Provider {...stores}>
+    <Router history={browserHistory}>
+      <AppWrapper/>
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 
@@ -21,7 +39,7 @@ todoStore.addTodo("Write simpler code");
 todoStore.todos[0].finished = true;
 
 setTimeout(() => {
-    todoStore.addTodo("Get a cookie as well");
+  todoStore.addTodo("Get a cookie as well");
 }, 2000);
 
 // playing around in the console
