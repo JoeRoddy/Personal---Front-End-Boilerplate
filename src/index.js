@@ -6,7 +6,6 @@ import registerServiceWorker from "./helpers/registerServiceWorker";
 import "./assets/styles/App.css";
 import App from "./components/App";
 import stores from "./models/index";
-import firebase from "firebase";
 import { Provider } from "mobx-react";
 import createBrowserHistory from 'history/createBrowserHistory';
 import {
@@ -15,11 +14,6 @@ import {
   Link,
   withRouter
 } from 'react-router-dom';
-
-var config = {
- //firebase config here
-};
-firebase.initializeApp(config);
 
 const browserHistory = createBrowserHistory();
 const AppWrapper = withRouter(App);

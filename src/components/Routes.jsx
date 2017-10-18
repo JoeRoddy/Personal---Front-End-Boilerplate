@@ -7,15 +7,12 @@ import Login from "./Login";
 import TodoList from "./TodoList";
 
 const Routes = observer(({ todoStore }) => {
-  debugger;
   let todoWrapper = () => <TodoList todoStore={todoStore} />;
-  todoWrapper = withRouter(todoWrapper);
-  let loginWrapper = withRouter(Login); 
 
   return (
     <Switch>
       <Route exact path="/" component={todoWrapper} />
-      <Route path="/login" component={loginWrapper} />
+      <Route path="/login" component={Login} />
     </Switch>
   );
 });
