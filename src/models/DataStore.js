@@ -11,13 +11,10 @@ export default class DataStore {
   constructor() {
     UserService.listenForUserChanges((err, user) => {
       if (err) {
-        debugger;
         return;
       } else if (!user) {
-        debugger
         this.userId = null;
       } else {
-        debugger;
         this.userId = user.id;
         this.users.set(user.id, user);
       }
