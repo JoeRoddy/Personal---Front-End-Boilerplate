@@ -21,7 +21,7 @@ export default class App extends Component {
           <Link to="/">Home</Link>
           {!user && <Link to="/login">Login</Link>}
           <div>User: {screenName}</div>
-          {user && <a onClick={e => UserService.signout()}>Logout</a>}
+          {user && <a onClick={e => UserService.signout(user)}>Logout</a>}
         </div>
         <Routes {...this.props} />
       </div>

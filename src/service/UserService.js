@@ -13,6 +13,7 @@ export default class UserService {
               return callback(null, createdUser);
             });
           } else {
+            FirestoreService.update("users", userAuth.uid, { lastOnline: new Date() });            
             that.listenToUser(userAuth.uid, (err, data) => {
               data.id = userAuth.uid;
               callback(null, data);
@@ -61,7 +62,8 @@ export default class UserService {
       displayName: user.displayName,
       emailVerified: user.emailVerified,
       isAnonymous: user.isAnonymous,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      lastOnline: new Date()
     };
 
     firebase
@@ -99,28 +101,7 @@ export default class UserService {
 
   static signout(user) {
     let auth = firebase.auth();
-    // user.online = false;
-    // this.updateFields(user, ["online"]);
     auth.signOut();
-  }
-
-  static monitorOnlineStatus(user) {
-    if (!user || !user.id) {
-      return;
-    }
-    var amOnline = firebase.database().ref("/.info/connected");
-    var userRef = firebase.database().ref("/users/" + user.id + "/online");
-    amOnline.on("value", snapshot => {
-      if (snapshot.val()) {
-        userRef.onDisconnect().set(false);
-        userRef.set(true);
-      }
-    });
-    userRef.on("value", snapshot => {
-      window.setTimeout(() => {
-        userRef.set(true);
-      }, 2000);
-    });
   }
 
   static resetPassword(email) {
@@ -141,9 +122,7 @@ export default class UserService {
     let auth = firebase.auth().currentUser;
     auth.updateEmail(email).then(
       function() {
-        user.email = email;
-        that.updateUser(user);
-        console.log("Changed");
+        FirestoreService.update("users", user.id, { email: email });
       },
       function(error) {
         console.log(error);

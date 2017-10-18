@@ -1,6 +1,7 @@
 import { observable, computed, action } from "mobx";
 import UserModel from "./UserModel";
 import UserService from "../service/UserService";
+import FirestoreService from "../service/FirestoreService";
 
 export default class DataStore {
   @observable userId = null;
@@ -10,12 +11,17 @@ export default class DataStore {
   constructor() {
     UserService.listenForUserChanges((err, user) => {
       if (err) {
+        debugger;
         return;
       } else if (!user) {
+        debugger
         this.userId = null;
+      } else {
+        debugger;
+        this.userId = user.id;
+        this.users.set(user.id, user);
       }
-      this.userId = user.id;
-      this.users.set(user.id, user);
+
     });
   }
 
